@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deal Watcher 🛒</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green: #2d6a4f; --green-dk: #1b4332; --green-lt: #d8f3dc;
+  --red: #c0392b; --amber: #e67e22; --blue: #2980b9;
+  --bg: #f4f6f5; --card: #fff; --border: #e0e8e3;
+  --text: #1a1a2e; --muted: #6b7c73; --radius: 12px;
+}
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+header { background: var(--green); color: #fff; padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+header h1 { font-size: 1.1rem; font-weight: 600; }
+header .stores { font-size: .75rem; opacity: .75; margin-left: auto; white-space: nowrap; }
+
+/* setup */
+#setup { max-width: 480px; margin: 60px auto; padding: 0 16px; }
+.setup-card { background: var(--card); border-radius: var(--radius); box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 32px; }
+.setup-card h2 { font-size: 1.1rem; margin-bottom: 10px; }
+.setup-card p  { font-size: .88rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+.setup-card a  { color: var(--blue); }
+.setup-card input {
+  width: 100%; border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; font-size: .95rem; font-family: monospace;
+  margin-bottom: 12px; color: var(--text);
+}
+.setup-card input:focus { outline: none; border-color: var(--green); }
+.setup-card button.primary {
+  width: 100%; background: var(--green); color: #fff; border: none;
+  border-radius: 8px; padding: 11px; font-size: .95rem; font-weight: 600; cursor: pointer;
+}
+.setup-card button.primary:hover { background: var(--green-dk); }
+.setup-err { font-size: .82rem; color: var(--red); margin-top: 8px; min-height: 18px; }
+
+/* bookmark box */
+.bookmark-box {
+  background: #f0f9f4; border: 1px solid #b7e4c7; border-radius: 8px;
+  padding: 14px 16px; margin-top: 20px; display: none;
+}
+.bookmark-box p { font-size: .84rem; color: var(--green-dk); margin-bottom: 8px; font-weight: 600; }
+.bookmark-box small { font-size: .78rem; color: var(--muted); display: block; margin-bottom: 10px; }
+.bookmark-url {
+  background: #fff; border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 10px; font-size: .75rem; font-family: monospace;
+  word-break: break-all; color: var(--text); user-select: all; cursor: text;
+  margin-bottom: 10px;
+}
+.bookmark-box button.copy-btn {
+  background: var(--green); color: #fff; border: none; border-radius: 6px;
+  padding: 7px 16px; font-size: .82rem; font-weight: 600; cursor: pointer; width: 100%;
+}
+
+/* app */
+main { max-width: 640px; margin: 24px auto; padding: 0 14px; display: flex; flex-direction: column; gap: 20px; }
+.card { background: var(--card); border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,.06); overflow: hidden; }
+.card-head { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.card-head h2 { font-size: .92rem; font-weight: 600; flex: 1; }
+.card-head button.logout { background: none; border: none; color: var(--muted); font-size: .78rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+.card-head button.logout:hover { background: #f0f0f0; color: var(--red); }
+
+/* run */
+.run-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+button.run-btn {
+  background: var(--green); color: #fff; border: none; border-radius: 8px;
+  padding: 13px 28px; font-size: 1rem; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  transition: background .15s;
+}
+button.run-btn:hover:not(:disabled) { background: var(--green-dk); }
+button.run-btn:disabled { opacity: .5; cursor: not-allowed; }
+.run-info { font-size: .84rem; color: var(--muted); text-align: center; line-height: 1.5; }
+.run-info a { color: var(--blue); text-decoration: none; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: .78rem; font-weight: 600; vertical-align: middle; margin-left: 6px; }
+.badge-running { background: #fff3cd; color: #856404; }
+.badge-success { background: #d1e7dd; color: #0a3622; }
+.badge-failure { background: #f8d7da; color: #58151c; }
+.badge-queued  { background: #e2e3e5; color: #41464b; }
+
+/* table */
+table { width: 100%; border-collapse: collapse; }
+thead th { background: #f0f4f2; text-align: left; padding: 9px 14px; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+tbody tr { border-top: 1px solid var(--border); }
+td { padding: 6px 14px; vertical-align: middle; }
+td input {
+  border: 1px solid transparent; border-radius: 6px; padding: 6px 8px;
+  font-size: .9rem; width: 100%; background: transparent; color: inherit;
+  transition: border-color .12s, background .12s;
+}
+td input:focus { outline: none; border-color: var(--green); background: #f0f9f4; }
+.col-del { width: 10%; text-align: center; }
+button.del { background: none; border: none; cursor: pointer; color: var(--red); opacity: .35; font-size: .95rem; padding: 4px 8px; border-radius: 4px; }
+button.del:hover { opacity: 1; background: #fdecea; }
+.tbl-footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
+button.add { background: var(--green-lt); color: var(--green-dk); border: none; border-radius: 8px; padding: 8px 16px; font-size: .88rem; font-weight: 600; cursor: pointer; }
+button.add:hover { background: #b7e4c7; }
+.save-st { font-size: .78rem; color: var(--muted); transition: opacity .4s; }
+.save-st.hidden { opacity: 0; }
+.hint { font-size: .73rem; color: #adb5b0; padding: 0 18px 12px; line-height: 1.5; }
+.spinner { text-align: center; padding: 32px; color: var(--muted); font-size: .9rem; }
+
+@media (max-width: 480px) {
+  header .stores { display: none; }
+  .col-price, .col-exclude { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span style="font-size:1.4rem">🛒</span>
+  <h1>Deal Watcher</h1>
+  <span class="stores">Día · Lidl · Mercadona · La Sirena</span>
+</header>
+
+<!-- Setup (only on first visit) -->
+<div id="setup" style="display:none">
+  <div class="setup-card">
+    <h2>🔑 Configuración inicial</h2>
+    <p>Esta app necesita un <strong>GitHub personal access token</strong> para acceder a tu lista y lanzar el buscador.<br><br>
+    Crea uno en <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=deal-watcher" target="_blank">github.com/settings/tokens/new</a> con los permisos <strong>repo</strong> y <strong>workflow</strong>.</p>
+    <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off" />
+    <button class="primary" onclick="saveToken()">Guardar y continuar</button>
+    <div class="setup-err" id="setupErr"></div>
+
+    <!-- Shown after token is verified -->
+    <div class="bookmark-box" id="bookmarkBox">
+      <p>✅ ¡Listo! Guarda este enlace en tus favoritos</p>
+      <small>Abre esta URL en cualquier dispositivo y no necesitarás introducir el token otra vez.</small>
+      <div class="bookmark-url" id="bookmarkUrl"></div>
+      <button class="copy-btn" onclick="copyUrl()">Copiar enlace</button>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<main id="app" style="display:none">
+  <div class="card">
+    <div class="card-head">
+      <span>🔍</span><h2>Buscar ofertas</h2>
+      <button class="logout" onclick="logout()" title="Salir">🔓 Salir</button>
+    </div>
+    <div class="run-body">
+      <button class="run-btn" id="runBtn" onclick="triggerRun()">
+        <span id="runIcon">▶</span><span id="runLabel">Run now</span>
+      </button>
+      <div class="run-info" id="runInfo">Cargando estado…</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span>📋</span><h2>Lista de la compra</h2></div>
+    <div class="spinner" id="listSpinner">Cargando lista…</div>
+    <table id="listTable" style="display:none">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th class="col-price">Precio máx €</th>
+          <th class="col-exclude">Excluir</th>
+          <th class="col-del"></th>
+        </tr>
+      </thead>
+      <tbody id="listBody"></tbody>
+    </table>
+    <div class="tbl-footer">
+      <button class="add" onclick="addRow()">+ Añadir</button>
+      <span class="save-st hidden" id="saveSt">Guardado ✓</span>
+    </div>
+    <p class="hint">Excluir: palabras que descartan el producto si aparecen en su nombre. Ej: fritas, chips</p>
+  </div>
+</main>
+
+<script>
+const REPO = 'amir-gutterman/supermarket-deal-watcher';
+const FILE = 'shopping_list.json';
+const WF   = 'check-deals.yml';
+const GH   = 'https://api.github.com';
+
+// ── token: read from URL hash OR localStorage ─────────────────────────────
+function getToken() {
+  const hash = Object.fromEntries(
+    location.hash.slice(1).split('&').filter(Boolean).map(p => p.split('='))
+  );
+  return hash['token'] || localStorage.getItem('gh_token') || '';
+}
+
+function ghHeaders() {
+  return {
+    'Authorization': `Bearer ${getToken()}`,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+}
+
+function bookmarkableUrl(token) {
+  return `${location.origin}${location.pathname}#token=${token}`;
+}
+
+async function saveToken() {
+  const t = document.getElementById('tokenInput').value.trim();
+  const err = document.getElementById('setupErr');
+  if (!t) { err.textContent = 'Pega tu token.'; return; }
+  err.textContent = 'Verificando…';
+  try {
+    const r = await fetch(`${GH}/repos/${REPO}`, {
+      headers: { 'Authorization': `Bearer ${t}`, 'Accept': 'application/vnd.github+json' }
+    });
+    if (!r.ok) throw new Error('Token inválido o sin acceso al repo.');
+    localStorage.setItem('gh_token', t);
+    err.textContent = '';
+
+    // Show the bookmarkable URL
+    const url = bookmarkableUrl(t);
+    document.getElementById('bookmarkUrl').textContent = url;
+    document.getElementById('bookmarkBox').style.display = '';
+
+    // After a moment, switch to the app
+    setTimeout(() => {
+      location.hash = `token=${t}`;
+      showApp();
+    }, 3000);
+  } catch(e) {
+    err.textContent = e.message;
+  }
+}
+
+function copyUrl() {
+  const url = document.getElementById('bookmarkUrl').textContent;
+  navigator.clipboard.writeText(url).then(() => {
+    document.querySelector('.copy-btn').textContent = '✓ Copiado';
+    setTimeout(() => document.querySelector('.copy-btn').textContent = 'Copiar enlace', 2000);
+  });
+}
+
+function logout() {
+  localStorage.removeItem('gh_token');
+  location.hash = '';
+  location.reload();
+}
+
+function showApp() {
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  loadList();
+  loadStatus();
+}
+
+// ── shopping list ──────────────────────────────────────────────────────────
+let rows = [], fileSha = '', saveTimer = null;
+
+async function loadList() {
+  try {
+    const r = await fetch(`${GH}/repos/${REPO}/contents/${FILE}`, { headers: ghHeaders() });
+    if (!r.ok) throw new Error(await r.text());
+    const d = await r.json();
+    fileSha = d.sha;
+    rows = JSON.parse(atob(d.content.replace(/\n/g, '')));
+    renderList();
+    document.getElementById('listSpinner').style.display = 'none';
+    document.getElementById('listTable').style.display = '';
+  } catch(e) {
+    document.getElementById('listSpinner').textContent = 'Error: ' + e.message;
+  }
+}
+
+function renderList() {
+  const tbody = document.getElementById('listBody');
+  tbody.innerHTML = '';
+  rows.forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input value="${esc(row.item)}" oninput="upd(${i},'item',this.value)" placeholder="ej: leche entera"></td>
+      <td class="col-price"><input value="${row.max_price??''}" oninput="upd(${i},'max_price',this.value)" type="number" step="0.01" min="0" placeholder="—"></td>
+      <td class="col-exclude"><input value="${esc((row.exclude||[]).join(', '))}" oninput="upd(${i},'exclude',this.value)" placeholder="fritas, chips…"></td>
+      <td class="col-del"><button class="del" onclick="delRow(${i})">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+
+function upd(i, f, v) {
+  if (f === 'max_price') rows[i].max_price = v === '' ? null : parseFloat(v);
+  else if (f === 'exclude') rows[i].exclude = v.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  else rows[i][f] = v;
+  clearTimeout(saveTimer); saveTimer = setTimeout(saveList, 800);
+}
+
+function addRow() {
+  rows.push({ item: '', max_price: null, exclude: [] });
+  renderList();
+  document.querySelector('#listBody tr:last-child input')?.focus();
+}
+
+function delRow(i) {
+  rows.splice(i, 1); renderList();
+  clearTimeout(saveTimer); saveTimer = setTimeout(saveList, 800);
+}
+
+async function saveList() {
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(rows, null, 2))));
+  try {
+    const r = await fetch(`${GH}/repos/${REPO}/contents/${FILE}`, {
+      method: 'PUT', headers: ghHeaders(),
+      body: JSON.stringify({ message: 'Update shopping list via dashboard', content, sha: fileSha }),
+    });
+    if (!r.ok) throw new Error(await r.text());
+    fileSha = (await r.json()).content.sha;
+    const el = document.getElementById('saveSt');
+    el.classList.remove('hidden');
+    clearTimeout(window._st); window._st = setTimeout(() => el.classList.add('hidden'), 2500);
+  } catch(e) { alert('Error guardando: ' + e.message); }
+}
+
+// ── run / status ──────────────────────────────────────────────────────────
+let statusPoll = null;
+
+async function loadStatus() {
+  try {
+    const r = await fetch(`${GH}/repos/${REPO}/actions/workflows/${WF}/runs?per_page=1`, { headers: ghHeaders() });
+    const d = await r.json();
+    const run = (d.workflow_runs || [])[0];
+    renderStatus(run);
+    const active = run && (run.status === 'in_progress' || run.status === 'queued');
+    if (active && !statusPoll) statusPoll = setInterval(loadStatus, 5000);
+    if (!active) { clearInterval(statusPoll); statusPoll = null; }
+  } catch(e) { /* silent */ }
+}
+
+function renderStatus(run) {
+  const info = document.getElementById('runInfo');
+  const btn  = document.getElementById('runBtn');
+  if (!run) { info.textContent = 'Sin ejecuciones aún.'; return; }
+  const active = run.status === 'in_progress' || run.status === 'queued';
+  btn.disabled = active;
+  document.getElementById('runIcon').textContent  = active ? '⏳' : '▶';
+  document.getElementById('runLabel').textContent = active ? 'Ejecutando…' : 'Run now';
+  let badge = '';
+  if      (run.status === 'in_progress')   badge = '<span class="badge badge-running">En curso</span>';
+  else if (run.status === 'queued')        badge = '<span class="badge badge-queued">En cola</span>';
+  else if (run.conclusion === 'success')   badge = '<span class="badge badge-success">✓ OK</span>';
+  else if (run.conclusion === 'failure')   badge = '<span class="badge badge-failure">✗ Error</span>';
+  const when = run.run_started_at ? ' · ' + new Date(run.run_started_at).toLocaleString('es-ES') : '';
+  info.innerHTML = `Última ejecución${badge}${when} · <a href="${run.html_url}" target="_blank">ver logs ↗</a>`;
+}
+
+async function triggerRun() {
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('runIcon').textContent  = '⏳';
+  document.getElementById('runLabel').textContent = 'Iniciando…';
+  try {
+    const r = await fetch(`${GH}/repos/${REPO}/actions/workflows/${WF}/dispatches`, {
+      method: 'POST', headers: ghHeaders(),
+      body: JSON.stringify({ ref: 'master' }),
+    });
+    if (!r.ok) throw new Error(await r.text());
+    await new Promise(res => setTimeout(res, 3000));
+    loadStatus();
+    if (!statusPoll) statusPoll = setInterval(loadStatus, 5000);
+  } catch(e) {
+    alert('Error al lanzar: ' + e.message);
+    document.getElementById('runBtn').disabled = false;
+    document.getElementById('runIcon').textContent  = '▶';
+    document.getElementById('runLabel').textContent = 'Run now';
+  }
+}
+
+// ── boot ──────────────────────────────────────────────────────────────────
+document.getElementById('tokenInput')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveToken();
+});
+
+if (getToken()) {
+  showApp();
+} else {
+  document.getElementById('setup').style.display = '';
+}
+</script>
+</body>
+</html>
