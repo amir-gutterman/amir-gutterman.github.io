@@ -273,6 +273,7 @@ async function loadList() {
 }
 
 function renderList() {
+  rows.sort((a, b) => (a.item || '').localeCompare(b.item || '', 'es', { sensitivity: 'base' }));
   const tbody = document.getElementById('listBody');
   tbody.innerHTML = '';
   rows.forEach((row, i) => {
