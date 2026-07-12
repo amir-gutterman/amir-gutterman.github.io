@@ -280,7 +280,7 @@ function renderList() {
     tr.innerHTML = `
       <td><input value="${esc(row.item)}" oninput="upd(${i},'item',this.value)" placeholder="ej: leche entera"></td>
       <td class="col-price"><input value="${row.max_price??''}" oninput="upd(${i},'max_price',this.value)" type="number" step="0.01" min="0" placeholder="—"></td>
-      <td class="col-exclude"><input value="${esc((row.exclude||[]).join(', '))}" oninput="upd(${i},'exclude',this.value)" placeholder="fritas, chips…"></td>
+      <td class="col-exclude"><input value="${esc((row.exclude||[]).join(', '))}" oninput="upd(${i},'exclude',this.value)" placeholder=""></td>
       <td class="col-actions">
         <button class="edit-btn" onclick="editRow(${i})" title="Editar">✏️</button>
         <button class="del" onclick="delRow(${i})" title="Eliminar">✕</button>
