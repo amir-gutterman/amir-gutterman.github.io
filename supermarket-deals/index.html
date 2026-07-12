@@ -274,7 +274,12 @@ async function loadList() {
 }
 
 function renderList() {
-  rows.sort((a, b) => (a.item || '').localeCompare(b.item || '', 'es', { sensitivity: 'base' }));
+  rows.sort((a, b) => {
+    if (!a.item && !b.item) return 0;
+    if (!a.item) return 1;
+    if (!b.item) return -1;
+    return a.item.localeCompare(b.item, 'es', { sensitivity: 'base' });
+  });
   const tbody = document.getElementById('listBody');
   tbody.innerHTML = '';
   rows.forEach((row, i) => {
