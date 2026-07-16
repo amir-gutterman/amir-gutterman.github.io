@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +69,7 @@ button.run-btn:disabled { opacity: .5; cursor: not-allowed; }
 .badge-failure { background: #f8d7da; color: #58151c; }
 .badge-queued  { background: #e2e3e5; color: #41464b; }
 
-/* ── list: desktop table ── */
+/* list */
 .list-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; border-bottom: 1px solid var(--border); }
 button.add { background: var(--green-lt); color: var(--green-dk); border: none; border-radius: 8px; padding: 7px 16px; font-size: .88rem; font-weight: 600; cursor: pointer; }
 button.add:hover { background: #b7e4c7; }
@@ -78,6 +78,7 @@ button.add:hover { background: #b7e4c7; }
 .hint { font-size: .73rem; color: #adb5b0; padding: 8px 18px 12px; line-height: 1.5; }
 .spinner { text-align: center; padding: 32px; color: var(--muted); font-size: .9rem; }
 
+/* desktop table */
 table { width: 100%; border-collapse: collapse; }
 thead th { background: #f0f4f2; text-align: left; padding: 9px 14px; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 tbody tr { border-top: 1px solid var(--border); }
@@ -92,31 +93,19 @@ td input:focus { outline: none; border-color: var(--green); background: #f0f9f4;
 button.del { background: none; border: none; cursor: pointer; color: var(--red); opacity: .35; font-size: .95rem; padding: 4px 8px; border-radius: 4px; }
 button.del:hover { opacity: 1; background: #fdecea; }
 
-/* ── list: mobile cards ── */
+/* mobile expandable list */
 .mobile-list { display: none; }
 .m-item { border-top: 1px solid var(--border); }
-.m-item-row {
-  display: flex; align-items: center; padding: 12px 16px; cursor: pointer;
-  gap: 10px; user-select: none;
-}
+.m-item-row { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; gap: 10px; user-select: none; }
 .m-item-name { flex: 1; font-size: .95rem; }
 .m-chevron { color: var(--muted); font-size: .8rem; transition: transform .2s; }
 .m-item.open .m-chevron { transform: rotate(90deg); }
-.m-item-detail {
-  display: none; padding: 0 16px 14px; flex-direction: column; gap: 10px;
-}
+.m-item-detail { display: none; padding: 0 16px 14px; flex-direction: column; gap: 10px; }
 .m-item.open .m-item-detail { display: flex; }
 .m-field label { display: block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 4px; }
-.m-field input {
-  width: 100%; border: 1px solid var(--border); border-radius: 6px;
-  padding: 8px 10px; font-size: .92rem; background: #fafcfa; color: inherit;
-}
+.m-field input { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: .92rem; background: #fafcfa; color: inherit; }
 .m-field input:focus { outline: none; border-color: var(--green); background: #f0f9f4; }
-button.m-del {
-  align-self: flex-start; background: none; border: 1px solid var(--red);
-  color: var(--red); border-radius: 6px; padding: 6px 14px;
-  font-size: .85rem; cursor: pointer; margin-top: 4px;
-}
+button.m-del { align-self: flex-start; background: none; border: 1px solid var(--red); color: var(--red); border-radius: 6px; padding: 6px 14px; font-size: .85rem; cursor: pointer; margin-top: 4px; }
 button.m-del:hover { background: #fdecea; }
 
 @media (max-width: 540px) {
@@ -136,17 +125,17 @@ button.m-del:hover { background: #fdecea; }
 
 <div id="setup" style="display:none">
   <div class="setup-card">
-    <h2>🔑 Configuración inicial</h2>
-    <p>Esta app necesita un <strong>GitHub personal access token</strong> para acceder a tu lista y lanzar el buscador.<br><br>
-    Crea uno en <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=deal-watcher" target="_blank">github.com/settings/tokens/new</a> con los permisos <strong>repo</strong> y <strong>workflow</strong>.</p>
+    <h2>🔑 Initial setup</h2>
+    <p>This app needs a <strong>GitHub personal access token</strong> to read and save your shopping list and trigger the deal search.<br><br>
+    Create one at <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=deal-watcher" target="_blank">github.com/settings/tokens/new</a> with the <strong>repo</strong> and <strong>workflow</strong> scopes.</p>
     <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off" />
-    <button class="primary" onclick="saveToken()">Guardar y continuar</button>
+    <button class="primary" onclick="saveToken()">Save and continue</button>
     <div class="setup-err" id="setupErr"></div>
     <div class="bookmark-box" id="bookmarkBox">
-      <p>✅ ¡Listo! Guarda este enlace en tus favoritos</p>
-      <small>Abre esta URL en cualquier dispositivo y no necesitarás introducir el token otra vez.</small>
+      <p>✅ Done! Save this link to your bookmarks</p>
+      <small>Open this URL on any device and you won't need to enter the token again.</small>
       <div class="bookmark-url" id="bookmarkUrl"></div>
-      <button class="copy-btn" onclick="copyUrl()">Copiar enlace</button>
+      <button class="copy-btn" onclick="copyUrl()">Copy link</button>
     </div>
   </div>
 </div>
@@ -154,43 +143,41 @@ button.m-del:hover { background: #fdecea; }
 <main id="app" style="display:none">
   <div class="card">
     <div class="card-head">
-      <span>🔍</span><h2>Buscar ofertas</h2>
-      <button class="share-btn" onclick="shareLink()">📲 Copiar enlace</button>
-      <button class="logout" onclick="logout()">🔓 Salir</button>
+      <span>🔍</span><h2>Search deals</h2>
+      <button class="share-btn" onclick="shareLink()">📲 Copy link</button>
+      <button class="logout" onclick="logout()">🔓 Log out</button>
     </div>
     <div class="run-body">
       <button class="run-btn" id="runBtn" onclick="triggerRun()">
         <span id="runIcon">▶</span><span id="runLabel">Run now</span>
       </button>
-      <div class="run-info" id="runInfo">Cargando estado…</div>
+      <div class="run-info" id="runInfo">Loading status…</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-head"><span>📋</span><h2>Lista de la compra</h2></div>
+    <div class="card-head"><span>📋</span><h2>Shopping list</h2></div>
     <div class="list-top">
-      <button class="add" onclick="addRow()">+ Añadir</button>
-      <span class="save-st hidden" id="saveSt">Guardado ✓</span>
+      <button class="add" onclick="addRow()">+ Add item</button>
+      <span class="save-st hidden" id="saveSt">Saved ✓</span>
     </div>
-    <div class="spinner" id="listSpinner">Cargando lista…</div>
+    <div class="spinner" id="listSpinner">Loading list…</div>
 
-    <!-- Desktop table -->
     <table id="listTable" style="display:none">
       <thead>
         <tr>
-          <th>Producto</th>
-          <th>Precio máx €</th>
-          <th>Excluir</th>
+          <th>Item</th>
+          <th>Max price €</th>
+          <th>Exclude</th>
           <th class="col-actions"></th>
         </tr>
       </thead>
       <tbody id="listBody"></tbody>
     </table>
 
-    <!-- Mobile expandable list -->
     <div class="mobile-list" id="mobileList"></div>
 
-    <p class="hint">Excluir: palabras que descartan el producto si aparecen en su nombre. Ej: fritas, chips</p>
+    <p class="hint">Exclude: comma-separated words that filter out a product if they appear in its name. E.g. fritas, chips</p>
   </div>
 </main>
 
@@ -213,11 +200,11 @@ function ghHeaders() {
 async function saveToken() {
   const t = document.getElementById('tokenInput').value.trim();
   const err = document.getElementById('setupErr');
-  if (!t) { err.textContent = 'Pega tu token.'; return; }
-  err.textContent = 'Verificando…';
+  if (!t) { err.textContent = 'Please paste your token.'; return; }
+  err.textContent = 'Verifying…';
   try {
     const r = await fetch(`${GH}/repos/${REPO}`, { headers: { 'Authorization': `Bearer ${t}`, 'Accept': 'application/vnd.github+json' } });
-    if (!r.ok) throw new Error('Token inválido o sin acceso al repo.');
+    if (!r.ok) throw new Error('Invalid token or no access to the repo.');
     localStorage.setItem('gh_token', t);
     err.textContent = '';
     const url = `${location.origin}${location.pathname}#token=${t}`;
@@ -228,16 +215,16 @@ async function saveToken() {
 }
 function copyUrl() {
   navigator.clipboard.writeText(document.getElementById('bookmarkUrl').textContent).then(() => {
-    document.querySelector('.copy-btn').textContent = '✓ Copiado';
-    setTimeout(() => document.querySelector('.copy-btn').textContent = 'Copiar enlace', 2000);
+    document.querySelector('.copy-btn').textContent = '✓ Copied';
+    setTimeout(() => document.querySelector('.copy-btn').textContent = 'Copy link', 2000);
   });
 }
 function shareLink() {
   const url = `${location.origin}${location.pathname}#token=${localStorage.getItem('gh_token') || getToken()}`;
   navigator.clipboard.writeText(url).then(() => {
     const btn = document.querySelector('.share-btn');
-    btn.textContent = '✓ Copiado';
-    setTimeout(() => btn.textContent = '📲 Copiar enlace', 2500);
+    btn.textContent = '✓ Copied';
+    setTimeout(() => btn.textContent = '📲 Copy link', 2500);
   });
 }
 function logout() { localStorage.removeItem('gh_token'); location.hash = ''; location.reload(); }
@@ -258,7 +245,7 @@ async function loadList() {
     document.getElementById('listSpinner').style.display = 'none';
     document.getElementById('listTable').style.display = '';
   } catch(e) {
-    document.getElementById('listSpinner').textContent = 'Error: ' + e.message;
+    document.getElementById('listSpinner').textContent = 'Error loading: ' + e.message;
   }
 }
 
@@ -285,10 +272,10 @@ function renderDesktop() {
   rows.forEach((row, i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><input value="${esc(row.item)}" oninput="upd(${i},'item',this.value)" placeholder="ej: leche entera"></td>
+      <td><input value="${esc(row.item)}" oninput="upd(${i},'item',this.value)" placeholder="e.g. leche entera"></td>
       <td><input value="${row.max_price??''}" oninput="upd(${i},'max_price',this.value)" type="number" step="0.01" min="0" placeholder="—"></td>
       <td><input value="${esc((row.exclude||[]).join(', '))}" oninput="upd(${i},'exclude',this.value)" placeholder=""></td>
-      <td class="col-actions"><button class="del" onclick="delRow(${i})" title="Eliminar">✕</button></td>
+      <td class="col-actions"><button class="del" onclick="delRow(${i})" title="Delete">✕</button></td>
     `;
     tbody.appendChild(tr);
   });
@@ -303,23 +290,23 @@ function renderMobile() {
     div.id = `m-item-${i}`;
     div.innerHTML = `
       <div class="m-item-row" onclick="toggleItem(${i})">
-        <span class="m-item-name">${esc(row.item) || '<em style="color:var(--muted)">sin nombre</em>'}</span>
+        <span class="m-item-name">${esc(row.item) || '<em style="color:var(--muted)">no name</em>'}</span>
         <span class="m-chevron">▶</span>
       </div>
       <div class="m-item-detail">
         <div class="m-field">
-          <label>Producto</label>
-          <input value="${esc(row.item)}" oninput="updM(${i},'item',this.value)" placeholder="ej: leche entera">
+          <label>Item</label>
+          <input value="${esc(row.item)}" oninput="updM(${i},'item',this.value)" placeholder="e.g. leche entera">
         </div>
         <div class="m-field">
-          <label>Precio máx €</label>
+          <label>Max price €</label>
           <input value="${row.max_price??''}" oninput="updM(${i},'max_price',this.value)" type="number" step="0.01" min="0" placeholder="—">
         </div>
         <div class="m-field">
-          <label>Excluir (separado por comas)</label>
+          <label>Exclude (comma-separated)</label>
           <input value="${esc((row.exclude||[]).join(', '))}" oninput="updM(${i},'exclude',this.value)" placeholder="">
         </div>
-        <button class="m-del" onclick="delRow(${i})">Eliminar</button>
+        <button class="m-del" onclick="delRow(${i})">Delete</button>
       </div>
     `;
     container.appendChild(div);
@@ -327,8 +314,7 @@ function renderMobile() {
 }
 
 function toggleItem(i) {
-  const el = document.getElementById(`m-item-${i}`);
-  el.classList.toggle('open');
+  document.getElementById(`m-item-${i}`).classList.toggle('open');
 }
 
 function upd(i, f, v) {
@@ -340,7 +326,6 @@ function upd(i, f, v) {
 
 function updM(i, f, v) {
   upd(i, f, v);
-  // Update the name label in the collapsed row header live
   if (f === 'item') {
     const nameEl = document.querySelector(`#m-item-${i} .m-item-name`);
     if (nameEl) nameEl.textContent = v || '';
@@ -350,15 +335,10 @@ function updM(i, f, v) {
 function addRow() {
   rows.push({ item: '', max_price: null, exclude: [] });
   renderList();
-  // Desktop: focus last row
   document.querySelector('#listBody tr:last-child input')?.focus();
-  // Mobile: open the new item and focus it
   const lastIdx = rows.length - 1;
   const el = document.getElementById(`m-item-${lastIdx}`);
-  if (el) {
-    el.classList.add('open');
-    el.querySelector('input')?.focus();
-  }
+  if (el) { el.classList.add('open'); el.querySelector('input')?.focus(); }
 }
 
 function delRow(i) {
@@ -379,7 +359,7 @@ async function saveList() {
     const el = document.getElementById('saveSt');
     el.classList.remove('hidden');
     clearTimeout(window._st); window._st = setTimeout(() => el.classList.add('hidden'), 2500);
-  } catch(e) { alert('Error guardando: ' + e.message); }
+  } catch(e) { alert('Error saving: ' + e.message); }
 }
 
 // ── run / status ──────────────────────────────────────────────────────────
@@ -400,24 +380,24 @@ async function loadStatus() {
 function renderStatus(run) {
   const info = document.getElementById('runInfo');
   const btn  = document.getElementById('runBtn');
-  if (!run) { info.textContent = 'Sin ejecuciones aún.'; return; }
+  if (!run) { info.textContent = 'No runs yet.'; return; }
   const active = run.status === 'in_progress' || run.status === 'queued';
   btn.disabled = active;
   document.getElementById('runIcon').textContent  = active ? '⏳' : '▶';
-  document.getElementById('runLabel').textContent = active ? 'Ejecutando…' : 'Run now';
+  document.getElementById('runLabel').textContent = active ? 'Running…' : 'Run now';
   let badge = '';
-  if      (run.status === 'in_progress') badge = '<span class="badge badge-running">En curso</span>';
-  else if (run.status === 'queued')      badge = '<span class="badge badge-queued">En cola</span>';
+  if      (run.status === 'in_progress') badge = '<span class="badge badge-running">In progress</span>';
+  else if (run.status === 'queued')      badge = '<span class="badge badge-queued">Queued</span>';
   else if (run.conclusion === 'success') badge = '<span class="badge badge-success">✓ OK</span>';
-  else if (run.conclusion === 'failure') badge = '<span class="badge badge-failure">✗ Error</span>';
-  const when = run.run_started_at ? ' · ' + new Date(run.run_started_at).toLocaleString('es-ES') : '';
-  info.innerHTML = `Última ejecución${badge}${when} · <a href="${run.html_url}" target="_blank">ver logs ↗</a>`;
+  else if (run.conclusion === 'failure') badge = '<span class="badge badge-failure">✗ Failed</span>';
+  const when = run.run_started_at ? ' · ' + new Date(run.run_started_at).toLocaleString('en-GB') : '';
+  info.innerHTML = `Last run${badge}${when} · <a href="${run.html_url}" target="_blank">view logs ↗</a>`;
 }
 
 async function triggerRun() {
   document.getElementById('runBtn').disabled = true;
   document.getElementById('runIcon').textContent  = '⏳';
-  document.getElementById('runLabel').textContent = 'Iniciando…';
+  document.getElementById('runLabel').textContent = 'Starting…';
   try {
     const r = await fetch(`${GH}/repos/${REPO}/actions/workflows/${WF}/dispatches`, {
       method: 'POST', headers: ghHeaders(),
@@ -428,7 +408,7 @@ async function triggerRun() {
     loadStatus();
     if (!statusPoll) statusPoll = setInterval(loadStatus, 5000);
   } catch(e) {
-    alert('Error al lanzar: ' + e.message);
+    alert('Error triggering run: ' + e.message);
     document.getElementById('runBtn').disabled = false;
     document.getElementById('runIcon').textContent  = '▶';
     document.getElementById('runLabel').textContent = 'Run now';
