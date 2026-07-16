@@ -35,33 +35,21 @@ header .stores { font-size: .75rem; opacity: .75; margin-left: auto; white-space
 }
 .setup-card button.primary:hover { background: var(--green-dk); }
 .setup-err { font-size: .82rem; color: var(--red); margin-top: 8px; min-height: 18px; }
-
-/* bookmark box */
-.bookmark-box {
-  background: #f0f9f4; border: 1px solid #b7e4c7; border-radius: 8px;
-  padding: 14px 16px; margin-top: 20px; display: none;
-}
+.bookmark-box { background: #f0f9f4; border: 1px solid #b7e4c7; border-radius: 8px; padding: 14px 16px; margin-top: 20px; display: none; }
 .bookmark-box p { font-size: .84rem; color: var(--green-dk); margin-bottom: 8px; font-weight: 600; }
 .bookmark-box small { font-size: .78rem; color: var(--muted); display: block; margin-bottom: 10px; }
-.bookmark-url {
-  background: #fff; border: 1px solid var(--border); border-radius: 6px;
-  padding: 8px 10px; font-size: .75rem; font-family: monospace;
-  word-break: break-all; color: var(--text); user-select: all; cursor: text;
-  margin-bottom: 10px;
-}
-.bookmark-box button.copy-btn {
-  background: var(--green); color: #fff; border: none; border-radius: 6px;
-  padding: 7px 16px; font-size: .82rem; font-weight: 600; cursor: pointer; width: 100%;
-}
+.bookmark-url { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; font-size: .75rem; font-family: monospace; word-break: break-all; color: var(--text); user-select: all; cursor: text; margin-bottom: 10px; }
+.bookmark-box button.copy-btn { background: var(--green); color: #fff; border: none; border-radius: 6px; padding: 7px 16px; font-size: .82rem; font-weight: 600; cursor: pointer; width: 100%; }
 
-/* app */
+/* app layout */
 main { max-width: 640px; margin: 24px auto; padding: 0 14px; display: flex; flex-direction: column; gap: 20px; }
 .card { background: var(--card); border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,.06); overflow: hidden; }
 .card-head { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
 .card-head h2 { font-size: .92rem; font-weight: 600; flex: 1; }
-.card-head button.logout, .card-head button.share-btn { background: none; border: none; color: var(--muted); font-size: .78rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
-.card-head button.logout:hover { background: #f0f0f0; color: var(--red); }
-.card-head button.share-btn:hover { background: #f0f0f0; color: var(--blue); }
+.card-head button { background: none; border: none; color: var(--muted); font-size: .78rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+.card-head button:hover { background: #f0f0f0; }
+.card-head button.logout:hover { color: var(--red); }
+.card-head button.share-btn:hover { color: var(--blue); }
 
 /* run */
 .run-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
@@ -81,7 +69,15 @@ button.run-btn:disabled { opacity: .5; cursor: not-allowed; }
 .badge-failure { background: #f8d7da; color: #58151c; }
 .badge-queued  { background: #e2e3e5; color: #41464b; }
 
-/* table */
+/* ── list: desktop table ── */
+.list-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; border-bottom: 1px solid var(--border); }
+button.add { background: var(--green-lt); color: var(--green-dk); border: none; border-radius: 8px; padding: 7px 16px; font-size: .88rem; font-weight: 600; cursor: pointer; }
+button.add:hover { background: #b7e4c7; }
+.save-st { font-size: .78rem; color: var(--muted); transition: opacity .4s; }
+.save-st.hidden { opacity: 0; }
+.hint { font-size: .73rem; color: #adb5b0; padding: 8px 18px 12px; line-height: 1.5; }
+.spinner { text-align: center; padding: 32px; color: var(--muted); font-size: .9rem; }
+
 table { width: 100%; border-collapse: collapse; }
 thead th { background: #f0f4f2; text-align: left; padding: 9px 14px; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 tbody tr { border-top: 1px solid var(--border); }
@@ -92,41 +88,41 @@ td input {
   transition: border-color .12s, background .12s;
 }
 td input:focus { outline: none; border-color: var(--green); background: #f0f9f4; }
-.col-actions { width: 18%; text-align: right; white-space: nowrap; }
-button.del, button.edit-btn {
-  background: none; border: none; cursor: pointer; font-size: .95rem;
-  padding: 4px 7px; border-radius: 4px; opacity: .4;
-}
-button.edit-btn { color: var(--blue); }
-button.edit-btn:hover { opacity: 1; background: #e8f4fd; }
-button.del { color: var(--red); }
+.col-actions { width: 6%; text-align: center; }
+button.del { background: none; border: none; cursor: pointer; color: var(--red); opacity: .35; font-size: .95rem; padding: 4px 8px; border-radius: 4px; }
 button.del:hover { opacity: 1; background: #fdecea; }
-.tbl-footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
-button.add { background: var(--green-lt); color: var(--green-dk); border: none; border-radius: 8px; padding: 8px 16px; font-size: .88rem; font-weight: 600; cursor: pointer; }
-button.add:hover { background: #b7e4c7; }
-.save-st { font-size: .78rem; color: var(--muted); transition: opacity .4s; }
-.save-st.hidden { opacity: 0; }
-.hint { font-size: .73rem; color: #adb5b0; padding: 0 18px 12px; line-height: 1.5; }
-.spinner { text-align: center; padding: 32px; color: var(--muted); font-size: .9rem; }
+
+/* ── list: mobile cards ── */
+.mobile-list { display: none; }
+.m-item { border-top: 1px solid var(--border); }
+.m-item-row {
+  display: flex; align-items: center; padding: 12px 16px; cursor: pointer;
+  gap: 10px; user-select: none;
+}
+.m-item-name { flex: 1; font-size: .95rem; }
+.m-chevron { color: var(--muted); font-size: .8rem; transition: transform .2s; }
+.m-item.open .m-chevron { transform: rotate(90deg); }
+.m-item-detail {
+  display: none; padding: 0 16px 14px; flex-direction: column; gap: 10px;
+}
+.m-item.open .m-item-detail { display: flex; }
+.m-field label { display: block; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 4px; }
+.m-field input {
+  width: 100%; border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 10px; font-size: .92rem; background: #fafcfa; color: inherit;
+}
+.m-field input:focus { outline: none; border-color: var(--green); background: #f0f9f4; }
+button.m-del {
+  align-self: flex-start; background: none; border: 1px solid var(--red);
+  color: var(--red); border-radius: 6px; padding: 6px 14px;
+  font-size: .85rem; cursor: pointer; margin-top: 4px;
+}
+button.m-del:hover { background: #fdecea; }
 
 @media (max-width: 540px) {
   header .stores { display: none; }
-  table thead { display: none; }
-  table tbody tr {
-    display: flex; flex-direction: column;
-    padding: 10px 14px; gap: 6px;
-    border-top: 1px solid var(--border);
-  }
-  table tbody td { padding: 0; display: block; width: 100%; }
-  table tbody td::before {
-    display: block; font-size: .7rem; text-transform: uppercase;
-    letter-spacing: .05em; color: var(--muted); margin-bottom: 2px;
-  }
-  td:nth-child(1)::before { content: 'Producto'; }
-  td:nth-child(2)::before { content: 'Precio máx €'; }
-  td:nth-child(3)::before { content: 'Excluir (separado por comas)'; }
-  .col-actions { display: flex; justify-content: flex-end; }
-  .col-actions::before { display: none !important; }
+  #listTable { display: none !important; }
+  .mobile-list { display: block; }
 }
 </style>
 </head>
@@ -138,7 +134,6 @@ button.add:hover { background: #b7e4c7; }
   <span class="stores">Día · Lidl · Mercadona · La Sirena</span>
 </header>
 
-<!-- Setup (only on first visit) -->
 <div id="setup" style="display:none">
   <div class="setup-card">
     <h2>🔑 Configuración inicial</h2>
@@ -147,8 +142,6 @@ button.add:hover { background: #b7e4c7; }
     <input type="password" id="tokenInput" placeholder="github_pat_…" autocomplete="off" />
     <button class="primary" onclick="saveToken()">Guardar y continuar</button>
     <div class="setup-err" id="setupErr"></div>
-
-    <!-- Shown after token is verified -->
     <div class="bookmark-box" id="bookmarkBox">
       <p>✅ ¡Listo! Guarda este enlace en tus favoritos</p>
       <small>Abre esta URL en cualquier dispositivo y no necesitarás introducir el token otra vez.</small>
@@ -158,13 +151,12 @@ button.add:hover { background: #b7e4c7; }
   </div>
 </div>
 
-<!-- Dashboard -->
 <main id="app" style="display:none">
   <div class="card">
     <div class="card-head">
       <span>🔍</span><h2>Buscar ofertas</h2>
-      <button class="share-btn" onclick="shareLink()" title="Copiar enlace con token">📲 Copiar enlace</button>
-      <button class="logout" onclick="logout()" title="Salir">🔓 Salir</button>
+      <button class="share-btn" onclick="shareLink()">📲 Copiar enlace</button>
+      <button class="logout" onclick="logout()">🔓 Salir</button>
     </div>
     <div class="run-body">
       <button class="run-btn" id="runBtn" onclick="triggerRun()">
@@ -176,22 +168,28 @@ button.add:hover { background: #b7e4c7; }
 
   <div class="card">
     <div class="card-head"><span>📋</span><h2>Lista de la compra</h2></div>
+    <div class="list-top">
+      <button class="add" onclick="addRow()">+ Añadir</button>
+      <span class="save-st hidden" id="saveSt">Guardado ✓</span>
+    </div>
     <div class="spinner" id="listSpinner">Cargando lista…</div>
+
+    <!-- Desktop table -->
     <table id="listTable" style="display:none">
       <thead>
         <tr>
           <th>Producto</th>
-          <th class="col-price">Precio máx €</th>
-          <th class="col-exclude">Excluir</th>
+          <th>Precio máx €</th>
+          <th>Excluir</th>
           <th class="col-actions"></th>
         </tr>
       </thead>
       <tbody id="listBody"></tbody>
     </table>
-    <div class="tbl-footer">
-      <button class="add" onclick="addRow()">+ Añadir</button>
-      <span class="save-st hidden" id="saveSt">Guardado ✓</span>
-    </div>
+
+    <!-- Mobile expandable list -->
+    <div class="mobile-list" id="mobileList"></div>
+
     <p class="hint">Excluir: palabras que descartan el producto si aparecen en su nombre. Ej: fritas, chips</p>
   </div>
 </main>
@@ -202,24 +200,14 @@ const FILE = 'shopping_list.json';
 const WF   = 'check-deals.yml';
 const GH   = 'https://api.github.com';
 
-// ── token: read from URL hash OR localStorage ─────────────────────────────
 function getToken() {
   const hash = Object.fromEntries(
     location.hash.slice(1).split('&').filter(Boolean).map(p => p.split('='))
   );
   return hash['token'] || localStorage.getItem('gh_token') || '';
 }
-
 function ghHeaders() {
-  return {
-    'Authorization': `Bearer ${getToken()}`,
-    'Accept': 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28',
-  };
-}
-
-function bookmarkableUrl(token) {
-  return `${location.origin}${location.pathname}#token=${token}`;
+  return { 'Authorization': `Bearer ${getToken()}`, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
 }
 
 async function saveToken() {
@@ -228,58 +216,32 @@ async function saveToken() {
   if (!t) { err.textContent = 'Pega tu token.'; return; }
   err.textContent = 'Verificando…';
   try {
-    const r = await fetch(`${GH}/repos/${REPO}`, {
-      headers: { 'Authorization': `Bearer ${t}`, 'Accept': 'application/vnd.github+json' }
-    });
+    const r = await fetch(`${GH}/repos/${REPO}`, { headers: { 'Authorization': `Bearer ${t}`, 'Accept': 'application/vnd.github+json' } });
     if (!r.ok) throw new Error('Token inválido o sin acceso al repo.');
     localStorage.setItem('gh_token', t);
     err.textContent = '';
-
-    // Show the bookmarkable URL
-    const url = bookmarkableUrl(t);
+    const url = `${location.origin}${location.pathname}#token=${t}`;
     document.getElementById('bookmarkUrl').textContent = url;
     document.getElementById('bookmarkBox').style.display = '';
-
-    // After a moment, switch to the app
-    setTimeout(() => {
-      location.hash = `token=${t}`;
-      showApp();
-    }, 3000);
-  } catch(e) {
-    err.textContent = e.message;
-  }
+    setTimeout(() => { location.hash = `token=${t}`; showApp(); }, 3000);
+  } catch(e) { err.textContent = e.message; }
 }
-
 function copyUrl() {
-  const url = document.getElementById('bookmarkUrl').textContent;
-  navigator.clipboard.writeText(url).then(() => {
+  navigator.clipboard.writeText(document.getElementById('bookmarkUrl').textContent).then(() => {
     document.querySelector('.copy-btn').textContent = '✓ Copiado';
     setTimeout(() => document.querySelector('.copy-btn').textContent = 'Copiar enlace', 2000);
   });
 }
-
 function shareLink() {
-  const token = localStorage.getItem('gh_token') || getToken();
-  const url = `${location.origin}${location.pathname}#token=${token}`;
+  const url = `${location.origin}${location.pathname}#token=${localStorage.getItem('gh_token') || getToken()}`;
   navigator.clipboard.writeText(url).then(() => {
     const btn = document.querySelector('.share-btn');
     btn.textContent = '✓ Copiado';
     setTimeout(() => btn.textContent = '📲 Copiar enlace', 2500);
   });
 }
-
-function logout() {
-  localStorage.removeItem('gh_token');
-  location.hash = '';
-  location.reload();
-}
-
-function showApp() {
-  document.getElementById('setup').style.display = 'none';
-  document.getElementById('app').style.display = '';
-  loadList();
-  loadStatus();
-}
+function logout() { localStorage.removeItem('gh_token'); location.hash = ''; location.reload(); }
+function showApp() { document.getElementById('setup').style.display = 'none'; document.getElementById('app').style.display = ''; loadList(); loadStatus(); }
 
 // ── shopping list ──────────────────────────────────────────────────────────
 let rows = [], fileSha = '', saveTimer = null;
@@ -300,30 +262,74 @@ async function loadList() {
   }
 }
 
-function renderList() {
+function sortRows() {
   rows.sort((a, b) => {
     if (!a.item && !b.item) return 0;
     if (!a.item) return 1;
     if (!b.item) return -1;
     return a.item.localeCompare(b.item, 'es', { sensitivity: 'base' });
   });
+}
+
+function renderList() {
+  sortRows();
+  renderDesktop();
+  renderMobile();
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+
+function renderDesktop() {
   const tbody = document.getElementById('listBody');
   tbody.innerHTML = '';
   rows.forEach((row, i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><input value="${esc(row.item)}" oninput="upd(${i},'item',this.value)" placeholder="ej: leche entera"></td>
-      <td class="col-price"><input value="${row.max_price??''}" oninput="upd(${i},'max_price',this.value)" type="number" step="0.01" min="0" placeholder="—"></td>
-      <td class="col-exclude"><input value="${esc((row.exclude||[]).join(', '))}" oninput="upd(${i},'exclude',this.value)" placeholder=""></td>
-      <td class="col-actions">
-        <button class="del" onclick="delRow(${i})" title="Eliminar">✕</button>
-      </td>
+      <td><input value="${row.max_price??''}" oninput="upd(${i},'max_price',this.value)" type="number" step="0.01" min="0" placeholder="—"></td>
+      <td><input value="${esc((row.exclude||[]).join(', '))}" oninput="upd(${i},'exclude',this.value)" placeholder=""></td>
+      <td class="col-actions"><button class="del" onclick="delRow(${i})" title="Eliminar">✕</button></td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+function renderMobile() {
+  const container = document.getElementById('mobileList');
+  container.innerHTML = '';
+  rows.forEach((row, i) => {
+    const div = document.createElement('div');
+    div.className = 'm-item';
+    div.id = `m-item-${i}`;
+    div.innerHTML = `
+      <div class="m-item-row" onclick="toggleItem(${i})">
+        <span class="m-item-name">${esc(row.item) || '<em style="color:var(--muted)">sin nombre</em>'}</span>
+        <span class="m-chevron">▶</span>
+      </div>
+      <div class="m-item-detail">
+        <div class="m-field">
+          <label>Producto</label>
+          <input value="${esc(row.item)}" oninput="updM(${i},'item',this.value)" placeholder="ej: leche entera">
+        </div>
+        <div class="m-field">
+          <label>Precio máx €</label>
+          <input value="${row.max_price??''}" oninput="updM(${i},'max_price',this.value)" type="number" step="0.01" min="0" placeholder="—">
+        </div>
+        <div class="m-field">
+          <label>Excluir (separado por comas)</label>
+          <input value="${esc((row.exclude||[]).join(', '))}" oninput="updM(${i},'exclude',this.value)" placeholder="">
+        </div>
+        <button class="m-del" onclick="delRow(${i})">Eliminar</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function toggleItem(i) {
+  const el = document.getElementById(`m-item-${i}`);
+  el.classList.toggle('open');
+}
 
 function upd(i, f, v) {
   if (f === 'max_price') rows[i].max_price = v === '' ? null : parseFloat(v);
@@ -332,16 +338,27 @@ function upd(i, f, v) {
   clearTimeout(saveTimer); saveTimer = setTimeout(saveList, 800);
 }
 
-function editRow(i) {
-  // Focus the item name input in that row
-  const inputs = document.querySelectorAll('#listBody tr')[i]?.querySelectorAll('input');
-  if (inputs?.[0]) inputs[0].focus();
+function updM(i, f, v) {
+  upd(i, f, v);
+  // Update the name label in the collapsed row header live
+  if (f === 'item') {
+    const nameEl = document.querySelector(`#m-item-${i} .m-item-name`);
+    if (nameEl) nameEl.textContent = v || '';
+  }
 }
 
 function addRow() {
   rows.push({ item: '', max_price: null, exclude: [] });
   renderList();
+  // Desktop: focus last row
   document.querySelector('#listBody tr:last-child input')?.focus();
+  // Mobile: open the new item and focus it
+  const lastIdx = rows.length - 1;
+  const el = document.getElementById(`m-item-${lastIdx}`);
+  if (el) {
+    el.classList.add('open');
+    el.querySelector('input')?.focus();
+  }
 }
 
 function delRow(i) {
@@ -389,10 +406,10 @@ function renderStatus(run) {
   document.getElementById('runIcon').textContent  = active ? '⏳' : '▶';
   document.getElementById('runLabel').textContent = active ? 'Ejecutando…' : 'Run now';
   let badge = '';
-  if      (run.status === 'in_progress')   badge = '<span class="badge badge-running">En curso</span>';
-  else if (run.status === 'queued')        badge = '<span class="badge badge-queued">En cola</span>';
-  else if (run.conclusion === 'success')   badge = '<span class="badge badge-success">✓ OK</span>';
-  else if (run.conclusion === 'failure')   badge = '<span class="badge badge-failure">✗ Error</span>';
+  if      (run.status === 'in_progress') badge = '<span class="badge badge-running">En curso</span>';
+  else if (run.status === 'queued')      badge = '<span class="badge badge-queued">En cola</span>';
+  else if (run.conclusion === 'success') badge = '<span class="badge badge-success">✓ OK</span>';
+  else if (run.conclusion === 'failure') badge = '<span class="badge badge-failure">✗ Error</span>';
   const when = run.run_started_at ? ' · ' + new Date(run.run_started_at).toLocaleString('es-ES') : '';
   info.innerHTML = `Última ejecución${badge}${when} · <a href="${run.html_url}" target="_blank">ver logs ↗</a>`;
 }
@@ -419,15 +436,8 @@ async function triggerRun() {
 }
 
 // ── boot ──────────────────────────────────────────────────────────────────
-document.getElementById('tokenInput')?.addEventListener('keydown', e => {
-  if (e.key === 'Enter') saveToken();
-});
-
-if (getToken()) {
-  showApp();
-} else {
-  document.getElementById('setup').style.display = '';
-}
+document.getElementById('tokenInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') saveToken(); });
+if (getToken()) { showApp(); } else { document.getElementById('setup').style.display = ''; }
 </script>
 </body>
 </html>
