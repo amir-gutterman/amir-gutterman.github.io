@@ -59,8 +59,9 @@ main { max-width: 640px; margin: 24px auto; padding: 0 14px; display: flex; flex
 .card { background: var(--card); border-radius: var(--radius); box-shadow: 0 2px 8px rgba(0,0,0,.06); overflow: hidden; }
 .card-head { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
 .card-head h2 { font-size: .92rem; font-weight: 600; flex: 1; }
-.card-head button.logout { background: none; border: none; color: var(--muted); font-size: .78rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+.card-head button.logout, .card-head button.share-btn { background: none; border: none; color: var(--muted); font-size: .78rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
 .card-head button.logout:hover { background: #f0f0f0; color: var(--red); }
+.card-head button.share-btn:hover { background: #f0f0f0; color: var(--blue); }
 
 /* run */
 .run-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
@@ -147,6 +148,7 @@ button.add:hover { background: #b7e4c7; }
   <div class="card">
     <div class="card-head">
       <span>🔍</span><h2>Buscar ofertas</h2>
+      <button class="share-btn" onclick="shareLink()" title="Copiar enlace con token">📲 Copiar enlace</button>
       <button class="logout" onclick="logout()" title="Salir">🔓 Salir</button>
     </div>
     <div class="run-body">
@@ -238,6 +240,16 @@ function copyUrl() {
   navigator.clipboard.writeText(url).then(() => {
     document.querySelector('.copy-btn').textContent = '✓ Copiado';
     setTimeout(() => document.querySelector('.copy-btn').textContent = 'Copiar enlace', 2000);
+  });
+}
+
+function shareLink() {
+  const token = localStorage.getItem('gh_token') || getToken();
+  const url = `${location.origin}${location.pathname}#token=${token}`;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.querySelector('.share-btn');
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => btn.textContent = '📲 Copiar enlace', 2500);
   });
 }
 
