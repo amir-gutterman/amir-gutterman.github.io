@@ -109,9 +109,24 @@ button.add:hover { background: #b7e4c7; }
 .hint { font-size: .73rem; color: #adb5b0; padding: 0 18px 12px; line-height: 1.5; }
 .spinner { text-align: center; padding: 32px; color: var(--muted); font-size: .9rem; }
 
-@media (max-width: 480px) {
+@media (max-width: 540px) {
   header .stores { display: none; }
-  .col-price, .col-exclude { display: none; }
+  table thead { display: none; }
+  table tbody tr {
+    display: flex; flex-direction: column;
+    padding: 10px 14px; gap: 6px;
+    border-top: 1px solid var(--border);
+  }
+  table tbody td { padding: 0; display: block; width: 100%; }
+  table tbody td::before {
+    display: block; font-size: .7rem; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--muted); margin-bottom: 2px;
+  }
+  td:nth-child(1)::before { content: 'Producto'; }
+  td:nth-child(2)::before { content: 'Precio máx €'; }
+  td:nth-child(3)::before { content: 'Excluir (separado por comas)'; }
+  .col-actions { display: flex; justify-content: flex-end; }
+  .col-actions::before { display: none !important; }
 }
 </style>
 </head>
